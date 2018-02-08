@@ -239,15 +239,21 @@
   input-model/command-completion)
 
 (reg-sub
-  :show-suggestions?
+  :show-suggestions-view?
   :<- [:get-current-chat-ui-prop :show-suggestions?]
   :<- [:get-current-chat]
   :<- [:selected-chat-command]
   :<- [:get-available-commands-responses]
   (fn [[show-suggestions? {:keys [input-text]} selected-command commands-responses]]
     (and (or show-suggestions? (input-model/starts-as-command? (string/trim (or input-text ""))))
-         (not (:command selected-command))
          (seq commands-responses))))
+
+(reg-sub
+  :show-suggestions?
+  :<- [:show-suggestions-view?]
+  :<- [:selected-chat-command]
+  (fn [[show-suggestions-box? selected-command]]
+    (and show-suggestions-box? (not (:command selected-command)))))
 
 (reg-sub
   :is-request-answered?

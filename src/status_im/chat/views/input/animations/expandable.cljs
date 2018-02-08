@@ -32,12 +32,21 @@
 (defn expandable-view-on-update [{:keys [anim-value to-changed-height max-height chat-input-margin height]}]
   (let [to-default-height (subscribe [:get-default-container-area-height])
         layout-height     (subscribe [:get :layout-height])]
-    (fn [_]
-      (let [to-change-height (if (= @to-changed-height :max)
-                               (input-utils/max-container-area-height @chat-input-margin @layout-height)
-                               @to-changed-height)
-            to-value         (min (or @to-changed-height (or height @to-default-height))
-                                  @max-height)]
+    (fn [component]
+      ;; we're going to change the height here
+
+      ;; by default the height can be modified by dispatching :set-expandable-height,
+      ;; but there is also a way to make the height adjusted automatically — in this
+      ;; case you just need to set :dynamic-height? to true
+      (let [{:keys [dynamic-height?] dynamic-height :height} (r/props component)
+            to-changed-height (if dynamic-height?
+                                dynamic-height
+                                @to-changed-height)
+            to-change-height  (if (= to-changed-height :max)
+                                (input-utils/max-container-area-height @chat-input-margin @layout-height)
+                                to-changed-height)
+            to-value          (min (or to-changed-height (or height @to-default-height))
+                                   @max-height)]
         (dispatch [:set :expandable-view-height-to-value to-value])
         (anim/start
           (anim/spring anim-value {:toValue  to-value
