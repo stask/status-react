@@ -1,6 +1,6 @@
 from tests import info
 import time
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from views.base_element import BaseButton
 from views.base_view import BaseView
 
@@ -51,6 +51,16 @@ class HomeView(BaseView):
 
     def get_chat_with_user(self, username):
         return ChatElement(self.driver, username)
+
+    def get_back_to_home_view(self):
+        counter = 0
+        while not self.home_button.is_element_present():
+            try:
+                if counter >= 5:
+                    return
+                self.back_button.click()
+            except (NoSuchElementException, TimeoutException):
+                counter += 1
 
     def add_contact(self, public_key):
         start_new_chat = self.plus_button.click()
