@@ -35,13 +35,15 @@
                                          :compiler     {:output-to     "target/ios/app.js"
                                                         :main          "env.ios.main"
                                                         :output-dir    "target/ios"
-                                                        :optimizations :none}}
+                                                        :optimizations :none
+                                                        :target        :nodejs}}
                                         :android
                                         {:source-paths     ["react-native/src" "src"]
                                          :compiler         {:output-to     "target/android/app.js"
                                                             :main          "env.android.main"
                                                             :output-dir    "target/android"
-                                                            :optimizations :none}
+                                                            :optimizations :none
+                                                            :target        :nodejs}
                                          :warning-handlers [status-im.utils.build/warning-handler]}}}
                         :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
                                        :timeout          240000}}
@@ -94,7 +96,8 @@
                                                          :optimizations      :simple
                                                          :closure-defines    {"goog.DEBUG" false}
                                                          :parallel-build     false
-                                                         :language-in        :ecmascript5}
+                                                         :language-in        :ecmascript5
+                                                         :target             :nodejs}
                                       :warning-handlers [status-im.utils.build/warning-handler]}
                                      :android
                                      {:source-paths     ["react-native/src" "src" "env/prod"]
@@ -106,5 +109,6 @@
                                                          :optimizations      :simple
                                                          :closure-defines    {"goog.DEBUG" false}
                                                          :parallel-build     false
-                                                         :language-in        :ecmascript5}
+                                                         :language-in        :ecmascript5
+                                                         :target             :nodejs}
                                       :warning-handlers [status-im.utils.build/warning-handler]}}}}})
