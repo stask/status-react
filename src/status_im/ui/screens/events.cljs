@@ -139,7 +139,7 @@
 (re-frame/reg-fx
   ::init-store
   (fn []
-    (data-store/init)))
+    nil))
 
 (re-frame/reg-fx
   ::initialize-crypt-fx

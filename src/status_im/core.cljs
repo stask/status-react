@@ -5,6 +5,7 @@
             [reagent.core :as reagent]
             [status-im.native-module.core :as status]
             [taoensso.timbre :as log]
+            [status-im.data-store.core :as data-store]
             [status-im.utils.config :as config]
             [goog.object :as object]))
 
@@ -15,5 +16,6 @@
   (log/set-level! config/log-level)
   (error-handler/register-exception-handler!)
   (status/init-jail)
+  (data-store/init)
   (.registerComponent react/app-registry "StatusIm" #(reagent/reactify-component app-root))
   (re-frame/dispatch-sync [:initialize-app]))
