@@ -1,11 +1,11 @@
 var jsSuggestionsContainerStyle = {
     keyboardShouldPersistTaps: "always",
     backgroundColor: "white",
+    flexGrow: 1,
     bounces: false
 };
 
 var jsSuggestionContainerStyle = {
-    paddingLeft: 16,
     backgroundColor: "white"
 };
 
@@ -16,22 +16,34 @@ var jsSubContainerStyle = {
     borderBottomColor: "#0000001f"
 };
 
+function jsSuggestionSubContainerStyle(isLast) {
+    var borderBottomWidth = (isLast ? 0 : 1);
+
+    return {
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingRight: 14,
+        marginLeft: 14,
+        borderBottomWidth: borderBottomWidth,
+        borderBottomColor: "#e8ebec"
+    };
+}
+
 var jsValueStyle = {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: "font",
     color: "#000000de"
 };
 
 var jsBoldValueStyle = {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: "font",
     color: "#000000de",
     fontWeight: "bold"
 };
 
 var jsDescriptionStyle = {
-    marginTop: 1.5,
-    paddingBottom: 9,
+    marginTop: 2,
     fontSize: 14,
     fontFamily: "font",
     color: "#838c93de"
@@ -318,7 +330,7 @@ function jsSuggestions(params, context) {
             suggestion.title = createMarkupText(suggestion.title);
         }
         var suggestionMarkup = status.components.view(jsSuggestionContainerStyle,
-            [status.components.view(jsSubContainerStyle,
+            [status.components.view(jsSuggestionSubContainerStyle(i == suggestions.length - 1),
                 [
                     status.components.text({style: jsValueStyle},
                         suggestion.title),
@@ -367,9 +379,7 @@ var suggestionsContainerStyle = {
     keyboardShouldPersistTaps: "always",
     backgroundColor: "white",
     flexGrow: 1,
-    bounces: false,
-    borderTopWidth: 1,
-    borderTopColor: "#e8ebec"
+    bounces: false
 }
 
 var suggestionContainerStyle = {

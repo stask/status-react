@@ -3,12 +3,18 @@
   (:require [status-im.ui.components.styles :as common]
             [status-im.utils.platform :as platform]))
 
+(def color-root-border "#e8ebec")
+
 (def color-item-description-text "#99a0a6")
 (def color-item-border "#e8ebec")
 
 (def item-height 52)
 (def border-height 1)
-(def border-for-last-item? false)
+
+(def root
+  {:background-color common/color-white
+   :border-top-color color-root-border
+   :border-top-width 1})
 
 (defn item-suggestion-container [last?]
   {:flex-direction      :row
@@ -17,7 +23,7 @@
    :margin-left         14
    :padding-right       14
    :border-bottom-color color-item-border
-   :border-bottom-width (if (and last? (not border-for-last-item?)) 0 border-height)})
+   :border-bottom-width (if last? 0 border-height)})
 
 (def item-suggestion-name
   {:color     common/color-black

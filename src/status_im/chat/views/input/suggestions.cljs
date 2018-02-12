@@ -46,7 +46,7 @@
                                                             (+ style/item-height
                                                                style/border-height)))
                                      :dynamic-height? true}
-         [react/view {:flex 1}
+         [react/view style/root
           [react/scroll-view {:keyboard-should-persist-taps :always
                               :bounces                      false}
            (when (seq responses)
