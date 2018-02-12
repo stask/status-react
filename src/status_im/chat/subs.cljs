@@ -166,7 +166,9 @@
 (defn- available-commands-responses [[commands-responses {:keys [input-text]}]]
   (->> commands-responses
        map->sorted-seq
-       (filter #(string/includes? (commands-model/command-name %) (or input-text "")))))
+       (filter (fn [item]
+                 (when (input-model/starts-as-command? input-text)
+                   (string/includes? (commands-model/command-name item) input-text))))))
 
 (reg-sub
   :get-available-commands
