@@ -1,5 +1,5 @@
 (ns status-im.chat.views.input.parameter-box
-  (:require-macros [status-im.utils.views :refer [defview]])
+  (:require-macros [status-im.utils.views :refer [defview letsubs]])
   (:require [re-frame.core :refer [subscribe dispatch]]
             [status-im.chat.views.input.animations.expandable :refer [expandable-view]]
             [status-im.chat.views.input.box-header :as box-header]
@@ -13,11 +13,13 @@
     (command-utils/generate-hiccup markup (first bot-id-bot-db) (second bot-id-bot-db))))
 
 (defview parameter-box-view []
-  [show-parameter-box? [:show-parameter-box?]
-   {:keys [title]} [:chat-parameter-box]]
-  (when show-parameter-box?
-    [expandable-view {:key           :parameter-box
-                      :draggable?    true
-                      :custom-header (when title
-                                       (box-header/get-header :parameter-box))}
-     [parameter-box-container]]))
+  (letsubs [show-parameter-box? [:show-parameter-box?]
+            {:keys [title height]} [:chat-parameter-box]]
+    (when show-parameter-box?
+      [expandable-view {:key             :parameter-box
+                        :draggable?      false
+                        :custom-header   (when title
+                                           (box-header/get-header :parameter-box))
+                        :height          height
+                        :dynamic-height? true}
+       [parameter-box-container]])))

@@ -45,7 +45,7 @@
             to-change-height  (if (= to-changed-height :max)
                                 (input-utils/max-container-area-height @chat-input-margin @layout-height)
                                 to-changed-height)
-            to-value          (min (or to-changed-height (or height @to-default-height))
+            to-value          (min (or to-change-height (or height @to-default-height))
                                    @max-height)]
         (dispatch [:set :expandable-view-height-to-value to-value])
         (anim/start

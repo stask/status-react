@@ -34,8 +34,6 @@
     :description description
     :last?       last?}])
 
-;; (re-frame/dispatch [:set-expandable-height :suggestions (* number-of-entries style/item-height)])
-
 (defview suggestions-view []
   (letsubs [show-suggestions-view? [:show-suggestions-view?]
             responses              [:get-available-responses]
@@ -44,11 +42,13 @@
       (when show-suggestions-view?
         [expandable/expandable-view {:key             :suggestions
                                      :draggable?      false
-                                     :height          (* number-of-entries
-                                                         style/item-height)
+                                     :height          (- (* number-of-entries
+                                                            (+ style/item-height
+                                                               style/border-height)))
                                      :dynamic-height? true}
          [react/view {:flex 1}
-          [react/scroll-view {:keyboardShouldPersistTaps :always}
+          [react/scroll-view {:keyboard-should-persist-taps :always
+                              :bounces                      false}
            (when (seq responses)
              (for [[i response] (map-indexed vector responses)]
                ^{:key i}

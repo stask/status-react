@@ -4,17 +4,20 @@
             [status-im.utils.platform :as platform]))
 
 (def color-item-description-text "#99a0a6")
-(def color-item-border "#e8eaeb")
+(def color-item-border "#e8ebec")
+
 (def item-height 52)
+(def border-height 1)
+(def border-for-last-item? false)
 
 (defn item-suggestion-container [last?]
   {:flex-direction      :row
    :align-items         :center
    :height              item-height
-   :padding-left        14
+   :margin-left         14
    :padding-right       14
    :border-bottom-color color-item-border
-   :border-bottom-width (if last? 0 1)})
+   :border-bottom-width (if (and last? (not border-for-last-item?)) 0 border-height)})
 
 (def item-suggestion-name
   {:color     common/color-black

@@ -1,14 +1,11 @@
-function jsSuggestionsContainerStyle(suggestionsCount) {
-    return {
-        marginVertical: 1,
-        marginHorizontal: 0,
-        keyboardShouldPersistTaps: "always",
-        //height: Math.min(150, (56 * suggestionsCount)),
-        backgroundColor: "white",
-        borderRadius: 5,
-        keyboardShouldPersistTaps: "always"
-    };
-}
+var jsSuggestionsContainerStyle = {
+    marginVertical: 1,
+    marginHorizontal: 0,
+    keyboardShouldPersistTaps: "always",
+    backgroundColor: "white",
+    borderRadius: 5,
+    bounces: false,
+};
 
 var jsSuggestionContainerStyle = {
     paddingLeft: 16,
@@ -342,9 +339,7 @@ function jsSuggestions(params, context) {
     }
 
     if (sugestionsMarkup.length > 0) {
-        var view = status.components.scrollView(jsSuggestionsContainerStyle(sugestionsMarkup.length),
-            sugestionsMarkup
-        );
+        var view = status.components.scrollView(jsSuggestionsContainerStyle, sugestionsMarkup);
         return {markup: view};
     } else {
         return {markup: null};
@@ -371,39 +366,44 @@ function jsHandler(params, context) {
     return result;
 }
 
-function suggestionsContainerStyle(suggestionsCount) {
-    return {
-        marginVertical: 1,
-        marginHorizontal: 0,
-        keyboardShouldPersistTaps: "always",
-        height: Math.min(150, (56 * suggestionsCount)),
-        backgroundColor: "white",
-        borderRadius: 5,
-        flexGrow: 1
-    };
+var suggestionsContainerStyle = {
+    marginVertical: 1,
+    marginHorizontal: 0,
+    keyboardShouldPersistTaps: "always",
+    backgroundColor: "white",
+    borderRadius: 5,
+    flexGrow: 1,
+    bounces: false
 }
 
 var suggestionContainerStyle = {
-    paddingLeft: 16,
     backgroundColor: "white"
 };
 
-var suggestionSubContainerStyle = {
-    height: 56,
-    borderBottomWidth: 1,
-    borderBottomColor: "#0000001f"
-};
+function suggestionSubContainerStyle(isTwoLineEntry, isLast) {
+    var height = (isTwoLineEntry ? 64 : 48);
+    var borderBottomWidth = (isLast ? 0 : 1);
+
+    return {
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingRight: 14,
+        marginLeft: 14,
+        height: height,
+        borderBottomWidth: borderBottomWidth,
+        borderBottomColor: "#e8ebec"
+    };
+}
 
 var valueStyle = {
-    marginTop: 9,
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: "font",
     color: "#000000de"
 };
 
 var descriptionStyle = {
-    marginTop: 1.5,
-    fontSize: 14,
+    marginTop: 2,
+    fontSize: 13,
     fontFamily: "font",
     color: "#838c93de"
 };
@@ -443,13 +443,15 @@ function getFaucets(networkId) {
 var faucets = getFaucets(status.ethereumNetworkId);
 
 function faucetSuggestions(params) {
-    var suggestions = faucets.map(function (entry) {
+    var subContainerStyle = suggestionSubContainerStyle(true, false);
+
+    var suggestions = faucets.map(function (entry, index) {
         return status.components.touchable(
             {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry.url, false]])},
             status.components.view(
                 suggestionContainerStyle,
                 [status.components.view(
-                    suggestionSubContainerStyle,
+                    (index == faucets.length - 1 ? suggestionSubContainerStyle(true, true) : subContainerStyle),
                     [
                         status.components.text(
                             {style: valueStyle},
@@ -466,11 +468,13 @@ function faucetSuggestions(params) {
     });
 
     var view = status.components.scrollView(
-        suggestionsContainerStyle(faucets.length),
+        suggestionsContainerStyle,
         suggestions
     );
 
-    return {markup: view};
+    var entryHeight = subContainerStyle.height + subContainerStyle.borderBottomWidth;
+
+    return {markup: view, height: entryHeight * faucets.length};
 }
 
 var faucetCommandConfig ={
@@ -523,13 +527,16 @@ if (faucets.length > 0) {
 }
 
 function debugSuggestions(params) {
-    var suggestions = ["On", "Off"].map(function (entry) {
+    var values = ["On", "Off"];
+    var subContainerStyle = suggestionSubContainerStyle(false, false);
+
+    var suggestions = values.map(function (entry, index) {
         return status.components.touchable(
             {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry, false]])},
             status.components.view(
                 suggestionContainerStyle,
                 [status.components.view(
-                    suggestionSubContainerStyle,
+                    (index == values.length - 1 ? suggestionSubContainerStyle(false, true) : subContainerStyle),
                     [
                         status.components.text(
                             {style: valueStyle},
@@ -542,11 +549,13 @@ function debugSuggestions(params) {
     });
 
     var view = status.components.scrollView(
-        suggestionsContainerStyle(faucets.length),
+        suggestionsContainerStyle,
         suggestions
     );
 
-    return {markup: view};
+    var entryHeight = subContainerStyle.height + subContainerStyle.borderBottomWidth;
+
+    return {markup: view, height: entryHeight * values.length};
 }
 
 status.command({
