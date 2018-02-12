@@ -17,7 +17,8 @@
             [status-im.ui.components.react :as react]
             [status-im.ui.components.icons.vector-icons :as vi]
             [status-im.utils.platform :as platform]
-            [status-im.utils.utils :as utils]))
+            [status-im.utils.utils :as utils]
+            [taoensso.timbre :as log]))
 
 (defview basic-text-input [{:keys [set-layout-height-fn set-container-width-fn height single-line-input?]}]
   (letsubs [input-text     [:chat :input-text]
@@ -180,7 +181,7 @@
         [send-button/send-button-view]]])))
 
 (defn container []
-  [react/view style/input-container-view
+  [react/view
    [parameter-box/parameter-box-view]
    [result-box/result-box-view]
    [suggestions/suggestions-view]

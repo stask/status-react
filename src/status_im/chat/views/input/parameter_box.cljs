@@ -17,13 +17,16 @@
 
 (defview parameter-box-view []
   (letsubs [show-parameter-box? [:show-parameter-box?]
-            {:keys [title height]} [:chat-parameter-box]]
-    (when show-parameter-box?
-      [expandable/expandable-view
-       {:key             :parameter-box
-        :draggable?      false
-        :custom-header   (when title
-                           (box-header/get-header :parameter-box))
-        :height          (+ height (:border-top-width style/root))
-        :dynamic-height? true}
-       [parameter-box-container]])))
+            parameter-box [:chat-parameter-box]]
+    (let [{:keys [title height]} parameter-box
+          draggable? (not height)]
+      (when show-parameter-box?
+        [expandable/expandable-view
+         {:key             :parameter-box
+          :draggable?      draggable?
+          :custom-header   (when title
+                             (box-header/get-header :parameter-box))
+          :height          (when-not draggable?
+                             (+ height (:border-top-width style/root)))
+          :dynamic-height? (not draggable?)}
+         [parameter-box-container]]))))

@@ -12,13 +12,15 @@
 (def color-send "#4360df")
 
 (def min-input-height 36)
+(def padding-vertical 8)
+(def border-height 1)
 (def max-input-height (* 4 min-input-height))
 
 (defn root [margin-bottom]
   {:background-color common/color-white
-   :elevation        2
+   :elevation        1
    :margin-bottom    margin-bottom
-   :border-top-width 1
+   :border-top-width border-height
    :border-top-color color-root-border
    :flex-direction   :column})
 
@@ -28,12 +30,9 @@
    :padding-left     14
    :padding-right    14})
 
-(defstyle input-container-view
-  {:ios {:z-index 1}})
-
 (def input-root
-  {:padding-top    8
-   :padding-bottom 8
+  {:padding-top    padding-vertical
+   :padding-bottom padding-vertical
    :flex           1})
 
 (defn input-animated [content-height]
