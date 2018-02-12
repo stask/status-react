@@ -78,31 +78,31 @@
                                (set-layout-width-fn w))}
      (or @input-text "")]))
 
-(defn- invisible-input-height [{:keys [set-layout-height-fn container-width]}]
-  (let [input-text    (subscribe [:chat :input-text])]
+(defview invisible-input-height [{:keys [set-layout-height-fn container-width]}]
+  (letsubs [input-text [:chat :input-text]]
     [react/text {:style     (style/invisible-input-text-height container-width)
                  :on-layout #(let [h (-> (.-nativeEvent %)
                                          (.-layout)
                                          (.-height))]
                                (set-layout-height-fn h))}
-     (or @input-text "")]))
+     (or input-text "")]))
 
-(defn- input-helper [_]
-  (let [input-text (subscribe [:chat :input-text])]
-    (fn [{:keys [command width]}]
-      (when-not (get-in command [:command :sequential-params])
-        (let [input (str/trim (or @input-text ""))
-              real-args (remove str/blank? (:args command))]
-          (when-let [placeholder (cond
-                                   (and command (empty? real-args))
-                                   (get-in command [:command :params 0 :placeholder])
+(defview input-helper [{:keys [command width]}]
+  (letsubs [input-text [:chat :input-text]]
+    (when (and (string/ends-with? (or input-text "") const/spacing-char)
+               (not (get-in command [:command :sequential-params])))
+      (let [input     (str/trim (or input-text ""))
+            real-args (remove str/blank? (:args command))]
+        (when-let [placeholder (cond
+                                 (and command (empty? real-args))
+                                 (get-in command [:command :params 0 :placeholder])
 
-                                   (and command
-                                        (= (count real-args) 1)
-                                        (input-model/text-ends-with-space? input))
-                                   (get-in command [:command :params 1 :placeholder]))]
-            [react/text {:style (style/input-helper-text width)}
-             placeholder]))))))
+                                 (and command
+                                      (= (count real-args) 1)
+                                      (input-model/text-ends-with-space? input))
+                                 (get-in command [:command :params 1 :placeholder]))]
+          [react/text {:style (style/input-helper-text width)}
+           placeholder])))))
 
 (defn get-options [type]
   (case (keyword type)

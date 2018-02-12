@@ -1,10 +1,7 @@
 var jsSuggestionsContainerStyle = {
-    marginVertical: 1,
-    marginHorizontal: 0,
     keyboardShouldPersistTaps: "always",
     backgroundColor: "white",
-    borderRadius: 5,
-    bounces: false,
+    bounces: false
 };
 
 var jsSuggestionContainerStyle = {
@@ -367,13 +364,12 @@ function jsHandler(params, context) {
 }
 
 var suggestionsContainerStyle = {
-    marginVertical: 1,
-    marginHorizontal: 0,
     keyboardShouldPersistTaps: "always",
     backgroundColor: "white",
-    borderRadius: 5,
     flexGrow: 1,
-    bounces: false
+    bounces: false,
+    borderTopWidth: 1,
+    borderTopColor: "#e8ebec"
 }
 
 var suggestionContainerStyle = {
@@ -447,7 +443,7 @@ function faucetSuggestions(params) {
 
     var suggestions = faucets.map(function (entry, index) {
         return status.components.touchable(
-            {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry.url, false]])},
+            {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry.url, true]])},
             status.components.view(
                 suggestionContainerStyle,
                 [status.components.view(
@@ -532,7 +528,7 @@ function debugSuggestions(params) {
 
     var suggestions = values.map(function (entry, index) {
         return status.components.touchable(
-            {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry, false]])},
+            {onPress: status.components.dispatch([status.events.SET_COMMAND_ARGUMENT, [0, entry, true]])},
             status.components.view(
                 suggestionContainerStyle,
                 [status.components.view(
