@@ -24,6 +24,6 @@
         :draggable?      false
         :custom-header   (when title
                            (box-header/get-header :parameter-box))
-        :height          height
+        :height          (+ height (:border-top-width style/root))
         :dynamic-height? true}
        [parameter-box-container]])))

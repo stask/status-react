@@ -42,11 +42,11 @@
       (when show-suggestions-view?
         [expandable/expandable-view {:key             :suggestions
                                      :draggable?      false
-                                     :height          (- (* number-of-entries
-                                                            (+ style/item-height
-                                                               style/border-height)))
+                                     :height          (* number-of-entries
+                                                         (+ style/item-height
+                                                            style/border-height))
                                      :dynamic-height? true}
-         [react/view style/root
+         [react/view
           [react/scroll-view {:keyboard-should-persist-taps :always
                               :bounces                      false}
            (when (seq responses)
