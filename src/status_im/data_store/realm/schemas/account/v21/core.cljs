@@ -84,7 +84,8 @@
           (.delete realm messages))))))
 
 (defn clean-dapps! [realm]
-  (let [dapps #{"bchat" "Dentacoin" "gnosis" "melonport" "oaken-water-meter"}]
+  (let [dapps #{"bchat" "Dentacoin" "gnosis" "melonport" "oaken-water-meter"
+                "Ethcro" "Augur" "mkr-market"}]
     (doseq [dapp dapps]
       (remove-dapp! realm dapp))))
 
